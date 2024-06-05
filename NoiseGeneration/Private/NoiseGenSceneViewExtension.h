@@ -8,9 +8,9 @@
 /**
  * 
  */
-class NoiseGenSceneViewExtension : public FSceneViewExtensionBase
+class FNoiseGenSceneViewExtension : public FSceneViewExtensionBase
 {
 public:
-	NoiseGenSceneViewExtension(const FAutoRegister& AutoRegister);
-	~NoiseGenSceneViewExtension() = default;
+	FNoiseGenSceneViewExtension(const FAutoRegister& AutoRegister);
+	~FNoiseGenSceneViewExtension() = default;
 };

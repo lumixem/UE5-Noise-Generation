@@ -2,6 +2,6 @@
 
 #include "NoiseGenSceneViewExtension.h"
 
-NoiseGenSceneViewExtension::NoiseGenSceneViewExtension(const FAutoRegister& AutoRegister) : FSceneViewExtensionBase(AutoRegister)
+FNoiseGenSceneViewExtension::FNoiseGenSceneViewExtension(const FAutoRegister& AutoRegister) : FSceneViewExtensionBase(AutoRegister)
 {
 }

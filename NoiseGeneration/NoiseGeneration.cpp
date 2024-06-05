@@ -3,4 +3,7 @@
 #include "NoiseGeneration.h"
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, NoiseGeneration, "NoiseGeneration" );
+IMPLEMENT_MODULE(FNoiseGenerationModule, MyNoiseGeneration);
+
+void FNoiseGenerationModule::StartupModule() {};
+void FNoiseGenerationModule::ShutdownModule() {};
