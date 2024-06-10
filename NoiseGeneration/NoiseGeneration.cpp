@@ -3,7 +3,7 @@
 #include "NoiseGeneration.h"
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_MODULE(FNoiseGenerationModule, MyNoiseGeneration);
+IMPLEMENT_MODULE(FNoiseGenerationModule, NoiseGeneration);
 
 void FNoiseGenerationModule::StartupModule() {};
 void FNoiseGenerationModule::ShutdownModule() {};
