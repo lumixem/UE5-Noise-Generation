@@ -11,8 +11,8 @@
 class NoiseGenerationSubsystem : public UEngineSubsystem
 {
 public:
-	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-	virtual void Deinitialize() override;
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override {};
+	virtual void Deinitialize() override {};
 
 private:
 
