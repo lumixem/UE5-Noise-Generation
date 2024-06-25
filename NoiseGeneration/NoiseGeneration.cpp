@@ -1,9 +1,17 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "NoiseGeneration.h"
-#include "Modules/ModuleManager.h"
+//#include "Modules/ModuleManager.h"
+#include "Misc/Paths.h"
+#include "GlobalShader.h"
 
 IMPLEMENT_MODULE(FNoiseGenerationModule, NoiseGeneration);
 
-void FNoiseGenerationModule::StartupModule() {};
+void FNoiseGenerationModule::StartupModule()
+{
+	const FString ShaderDirectory = FPaths::Combine(FPaths::ProjectDir(), TEXT("Shaders"));
+
+	AddShaderSourceDirectoryMapping(FString("/Shaders"), ShaderDirectory);
+};
+
 void FNoiseGenerationModule::ShutdownModule() {};
