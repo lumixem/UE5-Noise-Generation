@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "NoiseGeneration.h"
-//#include "Modules/ModuleManager.h"
+
 #include "Misc/Paths.h"
 #include "GlobalShader.h"
 

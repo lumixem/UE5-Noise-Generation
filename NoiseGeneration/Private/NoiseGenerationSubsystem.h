@@ -11,9 +11,9 @@
 class NoiseGenerationSubsystem : public UEngineSubsystem
 {
 public:
-	virtual void Initialize(FSubsystemCollectionBase& Collection) override {};
-	virtual void Deinitialize() override {};
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+	virtual void Deinitialize() override;
 
 private:
-
+	TSharedPtr<class FNoiseGenSceneViewExtension, ESPMode::ThreadSafe> m_NoiseGenerationSceneViewExtension;
 };
