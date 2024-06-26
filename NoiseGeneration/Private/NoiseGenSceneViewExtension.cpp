@@ -34,8 +34,26 @@ FScreenPassTexture FNoiseGenSceneViewExtension::GenerateNoise(FRDGBuilder& Graph
 
 	FGlobalShaderMap* GlobalShaderMap = GetGlobalShaderMap(GMaxRHIFeatureLevel);
 
+	// Retrieve the FGenerateNoiseCS shader parameters
+	FGenerateNoiseCS::FParameters* PassParameters = GraphBuilder.AllocParameters<FGenerateNoiseCS::FParameters>();
+
+	PassParameters->Color = FVector4f(1.f, 0.f, 0.f, 1.f);
+
+	FIntRect ScreenSize = SceneColor.ViewRect;
+
+	const int32 DefaultGroupSize = 8;
+	FIntPoint GroupSize(DefaultGroupSize, DefaultGroupSize);
+	FIntVector GroupCount = FComputeShaderUtils::GetGroupCount(ScreenSize.Size(), GroupSize);
+
 	// Create the shader
 	TShaderMapRef<FGenerateNoiseCS> ComputeShader(GlobalShaderMap);
+
+	FComputeShaderUtils::AddPass(
+		GraphBuilder,
+		RDG_EVENT_NAME("Noise Generatio CS"),
+		ComputeShader,
+		PassParameters,
+		GroupCount);
 
 	return SceneColor;
 }

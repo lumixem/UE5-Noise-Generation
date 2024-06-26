@@ -2,4 +2,4 @@
 
 #include "NoiseGenerationShaders.h"
 
-IMPLEMENT_GLOBAL_SHADER(FGenerateNoiseCS, "/Shaders/GenerateNoise.usf", "MainCS", SF_Compute);
+IMPLEMENT_GLOBAL_SHADER(FGenerateNoiseCS, "/Shaders/GenerateNoiseCS.usf", "MainCS", SF_Compute);

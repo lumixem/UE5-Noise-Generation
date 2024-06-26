@@ -12,6 +12,6 @@ void FNoiseGenerationModule::StartupModule()
 	const FString ShaderDirectory = FPaths::Combine(FPaths::ProjectDir(), TEXT("Shaders"));
 
 	AddShaderSourceDirectoryMapping(FString("/Shaders"), ShaderDirectory);
-};
+}
 
 void FNoiseGenerationModule::ShutdownModule() {};
