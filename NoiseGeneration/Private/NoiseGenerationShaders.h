@@ -13,7 +13,9 @@ class FGenerateNoiseCS : public FGlobalShader
 
 		BEGIN_SHADER_PARAMETER_STRUCT(FParameters,)
 
-		// parameters will go here
+		SHADER_PARAMETER(FVector4f, Color)
+		SHADER_PARAMETER(FVector2f, ScreenDimensions)
+		SHADER_PARAMETER_UAV(RWTexture2D<float>, OutputTexture)
 
 		END_SHADER_PARAMETER_STRUCT()
 };

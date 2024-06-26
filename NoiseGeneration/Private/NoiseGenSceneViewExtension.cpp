@@ -2,6 +2,7 @@
 
 #include "NoiseGenSceneViewExtension.h"
 #include "NoiseGenerationLogger.h"
+#include "NoiseGenerationShaders.h"
 
 #include "PostProcess/PostProcessing.h"
 #include "PostProcess/PostProcessMaterial.h"
@@ -21,16 +22,20 @@ void FNoiseGenSceneViewExtension::SubscribeToPostProcessingPass(EPostProcessingP
 {
 	if (Pass == EPostProcessingPass::Tonemap)
 	{
-
+		InOutPassCallbacks.Add(FAfterPassCallbackDelegate::CreateRaw(this, &FNoiseGenSceneViewExtension::GenerateNoise));
 	}
 }
 
-void FNoiseGenSceneViewExtension::GenerateNoise(FRDGBuilder& GraphBuilder, const FSceneView& SceneView, const FPostProcessMaterialInputs& Inputs)
+FScreenPassTexture FNoiseGenSceneViewExtension::GenerateNoise(FRDGBuilder& GraphBuilder, const FSceneView& SceneView, const FPostProcessMaterialInputs& Inputs)
 {
 	const FScreenPassTexture& SceneColor = Inputs.Textures[(uint32)EPostProcessMaterialInput::SceneColor];
-}
 
-void FNoiseGenSceneViewExtension::CreateShader(FRDGBuilder& GraphBuilder)
-{
-	//RDG_EVENT_SCOPE(GraphBuilder, "Noise Generation Start");
+	RDG_EVENT_SCOPE(GraphBuilder, "Noise Generation Pass");
+
+	FGlobalShaderMap* GlobalShaderMap = GetGlobalShaderMap(GMaxRHIFeatureLevel);
+
+	// Create the shader
+	TShaderMapRef<FGenerateNoiseCS> ComputeShader(GlobalShaderMap);
+
+	return SceneColor;
 }
