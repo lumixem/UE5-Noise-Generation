@@ -15,7 +15,7 @@ FNoiseGenSceneViewExtension::FNoiseGenSceneViewExtension(const FAutoRegister& Au
 
 void FNoiseGenSceneViewExtension::SubscribeToPostProcessingPass(EPostProcessingPass Pass, FAfterPassCallbackDelegateArray& InOutPassCallbacks, bool bIsPassEnabled)
 {
-	if (Pass == EPostProcessingPass::Tonemap)
+	if (Pass == EPostProcessingPass::VisualizeDepthOfField)
 	{
 		InOutPassCallbacks.Add(FAfterPassCallbackDelegate::CreateRaw(this, &FNoiseGenSceneViewExtension::GenerateNoise));
 	}
