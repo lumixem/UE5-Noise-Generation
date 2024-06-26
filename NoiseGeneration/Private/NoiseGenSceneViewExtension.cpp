@@ -13,11 +13,6 @@ FNoiseGenSceneViewExtension::FNoiseGenSceneViewExtension(const FAutoRegister& Au
 	UE_LOG(NoiseGenerationInit, Log, TEXT("NoiseGenSceneViewExtension registered"));
 }
 
-void FNoiseGenSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphBuilder, const FSceneView& View, const FPostProcessingInputs& Inputs)
-{
-	
-}
-
 void FNoiseGenSceneViewExtension::SubscribeToPostProcessingPass(EPostProcessingPass Pass, FAfterPassCallbackDelegateArray& InOutPassCallbacks, bool bIsPassEnabled)
 {
 	if (Pass == EPostProcessingPass::Tonemap)
@@ -37,9 +32,20 @@ FScreenPassTexture FNoiseGenSceneViewExtension::GenerateNoise(FRDGBuilder& Graph
 	// Retrieve the FGenerateNoiseCS shader parameters
 	FGenerateNoiseCS::FParameters* PassParameters = GraphBuilder.AllocParameters<FGenerateNoiseCS::FParameters>();
 
-	PassParameters->Color = FVector4f(1.f, 0.f, 0.f, 1.f);
+	// Create the output texture. It will be written to in the shader
+	FRDGTextureDesc TextureDesc = FRDGTextureDesc::Create2D(
+		{ SceneColor.ViewRect.Width(), SceneColor.ViewRect.Height() }, // Size
+		PF_FloatRGBA, // Format
+		FClearValueBinding::Black, // ClearValue
+		TexCreate_ShaderResource | TexCreate_UAV // Flags
+	);
+	FRDGTextureRef OutputTexture = GraphBuilder.CreateTexture(TextureDesc, TEXT("Output Texture"));
 
 	FIntRect ScreenSize = SceneColor.ViewRect;
+
+	PassParameters->Color = FVector4f(1.f, 0.f, 0.f, 1.f);
+	PassParameters->ScreenDimensions = FVector2f(SceneColor.ViewRect.Width(), SceneColor.ViewRect.Height());
+	PassParameters->OutputTexture = GraphBuilder.CreateUAV(OutputTexture);
 
 	const int32 DefaultGroupSize = 8;
 	FIntPoint GroupSize(DefaultGroupSize, DefaultGroupSize);
@@ -54,6 +60,9 @@ FScreenPassTexture FNoiseGenSceneViewExtension::GenerateNoise(FRDGBuilder& Graph
 		ComputeShader,
 		PassParameters,
 		GroupCount);
+
+	// Copy the written to texture to the scene color texture
+	AddCopyTexturePass(GraphBuilder, OutputTexture, SceneColor.Texture);
 
 	return SceneColor;
 }
