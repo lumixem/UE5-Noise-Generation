@@ -6,14 +6,17 @@
 
 #include "SceneViewExtension.h"
 
-void NoiseGenerationSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+void UNoiseGenerationSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
+	Super::Initialize(Collection);
+	UE_LOG(NoiseGenerationInit, Log, TEXT("NoiseGenerationSubsystem initialized"));
+
 	m_NoiseGenerationSceneViewExtension = FSceneViewExtensions::NewExtension<FNoiseGenSceneViewExtension>();
 	UE_LOG(NoiseGenerationInit, Log, TEXT("FNoiseGenSceneViewExtension created"));
 	UE_LOG(NoiseGenerationInit, Log, TEXT("NoiseGenerationSubsystem initialized"));
 }
 
-void NoiseGenerationSubsystem::Deinitialize()
+void UNoiseGenerationSubsystem::Deinitialize()
 {
 	// Prevent this SVE from being gathered, in case it is kept alive by a strong reference somewhere else.
 	{

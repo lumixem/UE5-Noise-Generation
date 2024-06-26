@@ -35,7 +35,7 @@ FScreenPassTexture FNoiseGenSceneViewExtension::GenerateNoise(FRDGBuilder& Graph
 	// Create the output texture. It will be written to in the shader
 	FRDGTextureDesc TextureDesc = FRDGTextureDesc::Create2D(
 		{ SceneColor.ViewRect.Width(), SceneColor.ViewRect.Height() }, // Size
-		PF_FloatRGBA, // Format
+		SceneColor.Texture->Desc.Format, // Format
 		FClearValueBinding::Black, // ClearValue
 		TexCreate_ShaderResource | TexCreate_UAV // Flags
 	);

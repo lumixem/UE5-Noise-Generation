@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "NoiseGeneration.h"
+#include "NoiseGenerationLogger.h"
 
 #include "Misc/Paths.h"
 #include "GlobalShader.h"
@@ -12,6 +13,8 @@ void FNoiseGenerationModule::StartupModule()
 	const FString ShaderDirectory = FPaths::Combine(FPaths::ProjectDir(), TEXT("Shaders"));
 
 	AddShaderSourceDirectoryMapping(FString("/Shaders"), ShaderDirectory);
+
+	UE_LOG(NoiseGenerationInit, Log, TEXT("FNoiseGenerationModule started"));
 }
 
 void FNoiseGenerationModule::ShutdownModule() {};

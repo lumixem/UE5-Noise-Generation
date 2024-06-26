@@ -4,12 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/EngineSubsystem.h"
+#include "NoiseGenerationSubsystem.generated.h"
 
 /**
  * 
  */
-class NoiseGenerationSubsystem : public UEngineSubsystem
+UCLASS()
+class UNoiseGenerationSubsystem : public UEngineSubsystem
 {
+	GENERATED_BODY()
+
 public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
