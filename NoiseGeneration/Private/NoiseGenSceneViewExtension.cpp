@@ -43,9 +43,14 @@ FScreenPassTexture FNoiseGenSceneViewExtension::GenerateNoise(FRDGBuilder& Graph
 
 	FIntRect ScreenSize = SceneColor.ViewRect;
 
+	static float Time = 0.0f;
+	Time += SceneView.Family->Time.GetDeltaRealTimeSeconds();
+	Time = fmod(Time, 1000.0f);
+
 	PassParameters->Color = FVector4f(1.f, 0.f, 0.f, 1.f);
 	PassParameters->ScreenDimensions = FVector2f(SceneColor.ViewRect.Width(), SceneColor.ViewRect.Height());
 	PassParameters->OutputTexture = GraphBuilder.CreateUAV(OutputTexture);
+	PassParameters->Time = Time;
 
 	const int32 DefaultGroupSize = 8;
 	FIntPoint GroupSize(DefaultGroupSize, DefaultGroupSize);
