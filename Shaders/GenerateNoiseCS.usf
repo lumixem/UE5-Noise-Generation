@@ -9,38 +9,26 @@
 float4 Color;
 float2 ScreenDimensions;
 RWTexture2D<float4> OutputTexture;
+float Time;
 
-// 2D Random
-float random(in float2 st)
-{
-    return frac(sin(dot(st.xy,
-                         float2(12.9898, 78.233)))
-                 * 43758.5453123);
+float2 random2(float2 st){
+    st = float2( dot(st,float2(127.1,311.7)),
+              dot(st,float2(269.5,183.3)) );
+    return -1.0 + 2.0*frac(sin(st)*43758.5453123);
 }
 
-// 2D Noise based on Morgan McGuire @morgan3d
-// https://www.shadertoy.com/view/4dS3Wd
-float noise(in float2 st)
-{
+// Gradient Noise by Inigo Quilez - iq/2013
+// https://www.shadertoy.com/view/XdXGW8
+float noise(float2 st) {
     float2 i = floor(st);
     float2 f = frac(st);
 
-    // Four corners in 2D of a tile
-    float a = random(i);
-    float b = random(i + float2(1.0, 0.0));
-    float c = random(i + float2(0.0, 1.0));
-    float d = random(i + float2(1.0, 1.0));
+    float2 u = f*f*(3.0-2.0*f);
 
-    // Smooth Interpolation
-
-    // Cubic Hermine Curve.  Same as SmoothStep()
-    float2 u = f * f * (3.0 - 2.0 * f);
-    // u = smoothstep(0.,1.,f);
-
-    // Mix 4 coorners percentages
-    return lerp(a, b, u.x) +
-            (c - a) * u.y * (1.0 - u.x) +
-            (d - b) * u.x * u.y;
+    return lerp( lerp( dot( random2(i + float2(0.0,0.0) ), f - float2(0.0,0.0) ),
+                     dot( random2(i + float2(1.0,0.0) ), f - float2(1.0,0.0) ), u.x),
+                lerp( dot( random2(i + float2(0.0,1.0) ), f - float2(0.0,1.0) ),
+                     dot( random2(i + float2(1.0,1.0) ), f - float2(1.0,1.0) ), u.x), u.y);
 }
 
 [numthreads(8, 8, 1)]
@@ -50,9 +38,15 @@ void MainCS(uint2 DispatchThreadId : SV_DispatchThreadID)
 	return;
 
     float2 st = DispatchThreadId.xy / ScreenDimensions.xy;
-    float2 pos = float2(st * 5.0);
+    st.x *= ScreenDimensions.x / ScreenDimensions.y;
+    float3 color = float3(0.0, 0.0, 0.0);
+
+    float t = abs(1.0 - sin(Time * 0.1)) * 5.0;
+
+    st += noise(st * 2.0) * t; // Animate the coordinate space
+    color = float3(1.0, 1.0, 1.0) * smoothstep(0.18, 0.2, noise(st)); // Big black drops
+    color += smoothstep(.15,.2,noise(st*10.)); // Black splatter
+    color -= smoothstep(.35,.4,noise(st*10.)); // Holes on splatter
     
-    float n = noise(pos);
-    
-    OutputTexture[DispatchThreadId.xy] = float4(float3(n, n, n), 1.0);
+    OutputTexture[DispatchThreadId.xy] = float4(color, 1.0);
 }
